@@ -32,3 +32,4 @@ export function addPerformanceStats(){
     document.body.appendChild(stats.dom);
     return stats;
 }
+
