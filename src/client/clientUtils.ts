@@ -10,6 +10,24 @@ export function makeCube() {
     return new THREE.Mesh(geometry, material);
 }
 
+export function makeBall(color: string) {
+    const geometry = new THREE.SphereGeometry();
+    const material = new THREE.MeshBasicMaterial({color, wireframe: true});
+    return new THREE.Mesh(geometry, material);
+}
+
+export function makeRGBBalls() {
+    const [greenBall, blueBall, redBall] = ['green', 'blue', 'red'].map(makeBall);
+    greenBall.add(blueBall);
+    redBall.add(greenBall)
+
+    greenBall.position.x = 5;
+    blueBall.position.x = 5;
+    return {
+        "Green" : greenBall, "Blue" :  blueBall, "Red" : redBall 
+    }
+}
+
 export const ratio = () => window.innerWidth / window.innerHeight;
 
 export function makeCamera(){
@@ -38,5 +56,6 @@ export function setup(){
         camera: makeCamera(),
         renderer: makeRenderer(),
         stats: addPerformanceStats(),
+        rgbBalls: makeRGBBalls(),
     }
 }
