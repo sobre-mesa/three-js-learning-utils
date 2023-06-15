@@ -1,29 +1,22 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { makeCube, ratio, makeCamera, makeRenderer, addPerformanceStats } from './clientUtils';
-import { addRotationGUI, addPositionGUI, addGuiToObject } from './guiUtils';
+import { ratio, setup} from './clientUtils';
+import { addRotationGUI, addPositionGUI, addGuiToObject, addScaleGUI } from './guiUtils';
 
-const scene = new THREE.Scene();
-const camera = makeCamera();
-const renderer = makeRenderer()
-const cube = makeCube();
-scene.add(cube);
-const stats = addPerformanceStats();
-new OrbitControls(camera, renderer.domElement);
+const { cube, scene, camera, renderer, stats } = setup();
 
 function render() {
     renderer.render(scene, camera);
 }
 
-function onWindowResize() {
-    camera.aspect = ratio();
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
+function addWindowsResizeListener() {
+    window.addEventListener('resize', () => {
+        camera.aspect = ratio();
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        render();
+    }, false);
 }
-
-window.addEventListener('resize', onWindowResize, false);
-
 
 function animate() {
     requestAnimationFrame(animate);
@@ -33,7 +26,14 @@ function animate() {
     render();
 }
 
-addGuiToObject("Cube", cube, [addRotationGUI, addPositionGUI]);
-addGuiToObject("Camera", camera, [addPositionGUI]);
+addWindowsResizeListener();
+new OrbitControls(camera, renderer.domElement);
 
+//Tools
+addGuiToObject("Cube", cube, [addRotationGUI, addPositionGUI, addScaleGUI]);
+addGuiToObject("Camera", camera, [addPositionGUI]);
+scene.add(new THREE.AxesHelper(5));
+
+//Objects
+scene.add(cube);
 animate();

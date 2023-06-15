@@ -2,19 +2,17 @@ import * as THREE from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 export function makeCube() {
-    const geometry = new THREE.BoxGeometry()
+    const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
+        color: 'red',
         wireframe: true,
     });
     return new THREE.Mesh(geometry, material);
 }
 
-export function ratio(){
-    return window.innerWidth / window.innerHeight;
-} 
+export const ratio = () => window.innerWidth / window.innerHeight;
 
-export function  makeCamera(){
+export function makeCamera(){
     const camera = new THREE.PerspectiveCamera(75, ratio(), 0.1, 1000);
     camera.position.z = 2;
     return camera;
@@ -33,3 +31,12 @@ export function addPerformanceStats(){
     return stats;
 }
 
+export function setup(){
+    return {
+        cube: makeCube(),
+        scene: new THREE.Scene(),
+        camera: makeCamera(),
+        renderer: makeRenderer(),
+        stats: addPerformanceStats(),
+    }
+}
